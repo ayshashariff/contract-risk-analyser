@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ isLoggedIn, setIsLoggedIn }) {
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
 
   return (
 
@@ -24,11 +28,35 @@ function Navbar() {
       <Link
         to="/contracts"
         style={{
-          color: "white"
+          color: "white",
+          marginRight: "20px"
         }}
       >
         Contracts
       </Link>
+
+      {!isLoggedIn && (
+
+        <Link
+          to="/login"
+          style={{
+            color: "white"
+          }}
+        >
+          Login
+        </Link>
+
+      )}
+
+      {isLoggedIn && (
+
+        <button
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+
+      )}
 
     </div>
   );
