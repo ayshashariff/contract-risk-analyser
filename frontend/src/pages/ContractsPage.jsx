@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ContractsTable from "../components/ContractsTable";
 
 function ContractsPage() {
 
@@ -19,30 +20,57 @@ function ContractsPage() {
   const [risk, setRisk] = useState("");
   const [search, setSearch] = useState("");
 
-  const addContract = () => {
+  const [editingId, setEditingId] = useState(null);
+
+  const addOrUpdateContract = () => {
 
     if (!title || !risk) {
       alert("Please fill all fields");
       return;
     }
 
-    const newContract = {
-      id: contracts.length + 1,
-      title,
-      risk
-    };
+    if (editingId) {
 
-    setContracts([...contracts, newContract]);
+      const updatedContracts = contracts.map((contract) =>
+
+        contract.id === editingId
+          ? { ...contract, title, risk }
+          : contract
+
+      );
+
+      setContracts(updatedContracts);
+
+      setEditingId(null);
+
+    } else {
+
+      const newContract = {
+        id: contracts.length + 1,
+        title,
+        risk
+      };
+
+      setContracts([...contracts, newContract]);
+    }
 
     setTitle("");
     setRisk("");
   };
 
   const deleteContract = (id) => {
+
     const updatedContracts =
       contracts.filter((contract) => contract.id !== id);
 
     setContracts(updatedContracts);
+  };
+
+  const editContract = (contract) => {
+
+    setTitle(contract.title);
+    setRisk(contract.risk);
+    setEditingId(contract.id);
   };
 
   const filteredContracts = contracts.filter((contract) =>
@@ -50,6 +78,7 @@ function ContractsPage() {
   );
 
   return (
+
     <div style={{ padding: "20px" }}>
 
       <h1>Contracts List</h1>
@@ -81,54 +110,19 @@ function ContractsPage() {
 
       <br /><br />
 
-      <button onClick={addContract}>
-        Add Contract
+      <button onClick={addOrUpdateContract}>
+
+        {editingId ? "Update Contract" : "Add Contract"}
+
       </button>
 
       <br /><br />
 
-      {filteredContracts.length === 0 ? (
-        <p>No contracts found</p>
-      ) : (
-        <table border="1" cellPadding="10">
-
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Risk</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-
-            {filteredContracts.map((contract) => (
-
-              <tr key={contract.id}>
-
-                <td>{contract.id}</td>
-
-                <td>{contract.title}</td>
-
-                <td>{contract.risk}</td>
-
-                <td>
-                  <button
-                    onClick={() => deleteContract(contract.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-
-              </tr>
-
-            ))}
-
-          </tbody>
-
-        </table>
-      )}
+      <ContractsTable
+        contracts={filteredContracts}
+        deleteContract={deleteContract}
+        editContract={editContract}
+      />
 
     </div>
   );
