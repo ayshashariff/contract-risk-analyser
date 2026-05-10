@@ -1,3 +1,4 @@
+import RiskBadge from "./RiskBadge";
 function ContractsTable({
   contracts,
   deleteContract,
@@ -31,7 +32,9 @@ function ContractsTable({
 
             <td>{contract.title}</td>
 
-            <td>{contract.risk}</td>
+            <td>
+  <RiskBadge risk={contract.risk} />
+</td>
 
             <td>
 
