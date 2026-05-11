@@ -3,6 +3,7 @@ import ContractsTable from "../components/ContractsTable";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
 import Toast from "../components/Toast";
+import StatsCard from "../components/StatsCard";
 
 function ContractsPage() {
 
@@ -182,6 +183,21 @@ function ContractsPage() {
     reader.readAsText(file);
   };
 
+  const totalContracts =
+    contracts.length;
+
+  const highRiskContracts =
+    contracts.filter(
+      (contract) =>
+        contract.risk.toLowerCase() === "high"
+    ).length;
+
+  const lowRiskContracts =
+    contracts.filter(
+      (contract) =>
+        contract.risk.toLowerCase() === "low"
+    ).length;
+
   const filteredContracts = contracts.filter((contract) =>
     contract.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -197,6 +213,21 @@ function ContractsPage() {
       <Toast message={toastMessage} />
 
       <h1>Contracts List</h1>
+
+      <StatsCard
+        title="Total Contracts"
+        count={totalContracts}
+      />
+
+      <StatsCard
+        title="High Risk Contracts"
+        count={highRiskContracts}
+      />
+
+      <StatsCard
+        title="Low Risk Contracts"
+        count={lowRiskContracts}
+      />
 
       {error && (
 
