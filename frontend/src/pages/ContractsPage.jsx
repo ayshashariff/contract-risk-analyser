@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ContractsTable from "../components/ContractsTable";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function ContractsPage() {
 
@@ -20,12 +21,28 @@ function ContractsPage() {
   const [risk, setRisk] = useState("");
   const [search, setSearch] = useState("");
 
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState("");
+
   const [editingId, setEditingId] = useState(null);
+
+  useEffect(() => {
+
+    setTimeout(() => {
+
+      setLoading(false);
+
+    }, 2000);
+
+  }, []);
 
   const addOrUpdateContract = () => {
 
     if (!title || !risk) {
-      alert("Please fill all fields");
+
+      setError("Please fill all fields");
+
       return;
     }
 
@@ -56,6 +73,7 @@ function ContractsPage() {
 
     setTitle("");
     setRisk("");
+    setError("");
   };
 
   const deleteContract = (id) => {
@@ -77,11 +95,23 @@ function ContractsPage() {
     contract.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
   return (
 
     <div style={{ padding: "20px" }}>
 
       <h1>Contracts List</h1>
+
+      {error && (
+
+        <p style={{ color: "red" }}>
+          {error}
+        </p>
+
+      )}
 
       <input
         type="text"
