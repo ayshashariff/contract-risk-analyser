@@ -19,43 +19,57 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const [darkMode, setDarkMode] = useState(false);
+
   return (
 
-    <BrowserRouter>
+    <div
+      style={{
+        backgroundColor: darkMode ? "#111" : "white",
+        color: darkMode ? "white" : "black",
+        minHeight: "100vh"
+      }}
+    >
 
-      <Navbar
-        isLoggedIn={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-      />
+      <BrowserRouter>
 
-      <Routes>
-
-        <Route
-          path="/"
-          element={<DashboardPage />}
+        <Navbar
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
         />
 
-        <Route
-          path="/login"
-          element={
-            <LoginPage
-              setIsLoggedIn={setIsLoggedIn}
-            />
-          }
-        />
+        <Routes>
 
-        <Route
-          path="/contracts"
-          element={
-            isLoggedIn
-              ? <ContractsPage />
-              : <Navigate to="/login" />
-          }
-        />
+          <Route
+            path="/"
+            element={<DashboardPage />}
+          />
 
-      </Routes>
+          <Route
+            path="/login"
+            element={
+              <LoginPage
+                setIsLoggedIn={setIsLoggedIn}
+              />
+            }
+          />
 
-    </BrowserRouter>
+          <Route
+            path="/contracts"
+            element={
+              isLoggedIn
+                ? <ContractsPage />
+                : <Navigate to="/login" />
+            }
+          />
+
+        </Routes>
+
+      </BrowserRouter>
+
+    </div>
   );
 }
 

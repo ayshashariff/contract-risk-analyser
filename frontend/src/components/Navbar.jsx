@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 
-function Navbar({ isLoggedIn, setIsLoggedIn }) {
+function Navbar({
+  isLoggedIn,
+  setIsLoggedIn,
+  darkMode,
+  setDarkMode
+}) {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -11,7 +16,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
     <div
       style={{
         padding: "15px",
-        backgroundColor: "black"
+        backgroundColor: darkMode ? "#222" : "black"
       }}
     >
 
@@ -40,7 +45,8 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
         <Link
           to="/login"
           style={{
-            color: "white"
+            color: "white",
+            marginRight: "20px"
           }}
         >
           Login
@@ -50,13 +56,21 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
 
       {isLoggedIn && (
 
-        <button
-          onClick={handleLogout}
-        >
+        <button onClick={handleLogout}>
           Logout
         </button>
 
       )}
+
+      {" "}
+
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+      >
+
+        {darkMode ? "Light Mode" : "Dark Mode"}
+
+      </button>
 
     </div>
   );
