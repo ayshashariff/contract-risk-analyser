@@ -36,6 +36,8 @@ function ContractsPage() {
 
   const [riskFilter, setRiskFilter] = useState("all");
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
@@ -228,6 +230,23 @@ function ContractsPage() {
       return b.title.localeCompare(a.title);
     });
 
+  const contractsPerPage = 5;
+
+  const startIndex =
+    (currentPage - 1) * contractsPerPage;
+
+  const paginatedContracts =
+    filteredContracts.slice(
+      startIndex,
+      startIndex + contractsPerPage
+    );
+
+  const totalPages =
+    Math.ceil(
+      filteredContracts.length /
+      contractsPerPage
+    );
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -355,11 +374,39 @@ function ContractsPage() {
       <br /><br />
 
       <ContractsTable
-        contracts={filteredContracts}
+        contracts={paginatedContracts}
         deleteContract={deleteContract}
         editContract={editContract}
         viewContract={viewContract}
       />
+
+      <br />
+
+      <button
+        disabled={currentPage === 1}
+        onClick={() =>
+          setCurrentPage(currentPage - 1)
+        }
+      >
+        Previous
+      </button>
+
+      {" "}
+
+      <span>
+        Page {currentPage} of {totalPages}
+      </span>
+
+      {" "}
+
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() =>
+          setCurrentPage(currentPage + 1)
+        }
+      >
+        Next
+      </button>
 
       <Modal
         contract={selectedContract}
