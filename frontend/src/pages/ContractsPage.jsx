@@ -4,6 +4,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
 import Toast from "../components/Toast";
 import StatsCard from "../components/StatsCard";
+import RecentContracts from "../components/RecentContracts";
 
 function ContractsPage() {
 
@@ -247,6 +248,11 @@ function ContractsPage() {
       contractsPerPage
     );
 
+  const recentContracts =
+    [...contracts]
+      .reverse()
+      .slice(0, 5);
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -258,6 +264,10 @@ function ContractsPage() {
       <Toast message={toastMessage} />
 
       <h1>Contracts List</h1>
+
+      <RecentContracts
+        contracts={recentContracts}
+      />
 
       <StatsCard
         title="Total Contracts"
