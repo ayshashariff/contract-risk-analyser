@@ -2,21 +2,30 @@ import { useEffect, useState } from "react";
 import ContractsTable from "../components/ContractsTable";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
+import Toast from "../components/Toast";
 
 function ContractsPage() {
 
-  const [contracts, setContracts] = useState([
-    {
-      id: 1,
-      title: "Employment Agreement",
-      risk: "Low"
-    },
-    {
-      id: 2,
-      title: "Vendor Contract",
-      risk: "High"
-    }
-  ]);
+  const [contracts, setContracts] = useState(() => {
+
+    const savedContracts =
+      localStorage.getItem("contracts");
+
+    return savedContracts
+      ? JSON.parse(savedContracts)
+      : [
+          {
+            id: 1,
+            title: "Employment Agreement",
+            risk: "Low"
+          },
+          {
+            id: 2,
+            title: "Vendor Contract",
+            risk: "High"
+          }
+        ];
+  });
 
   const [title, setTitle] = useState("");
   const [risk, setRisk] = useState("");
@@ -27,6 +36,8 @@ function ContractsPage() {
   const [error, setError] = useState("");
 
   const [selectedContract, setSelectedContract] = useState(null);
+
+  const [toastMessage, setToastMessage] = useState("");
 
   const [editingId, setEditingId] = useState(null);
 
@@ -39,6 +50,15 @@ function ContractsPage() {
     }, 2000);
 
   }, []);
+
+  useEffect(() => {
+
+    localStorage.setItem(
+      "contracts",
+      JSON.stringify(contracts)
+    );
+
+  }, [contracts]);
 
   const addOrUpdateContract = () => {
 
@@ -77,6 +97,12 @@ function ContractsPage() {
     setTitle("");
     setRisk("");
     setError("");
+
+    setToastMessage("Contract saved successfully");
+
+    setTimeout(() => {
+      setToastMessage("");
+    }, 3000);
   };
 
   const deleteContract = (id) => {
@@ -113,6 +139,8 @@ function ContractsPage() {
   return (
 
     <div style={{ padding: "20px" }}>
+
+      <Toast message={toastMessage} />
 
       <h1>Contracts List</h1>
 
