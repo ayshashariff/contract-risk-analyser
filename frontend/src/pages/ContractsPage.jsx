@@ -151,6 +151,37 @@ function ContractsPage() {
     link.click();
   };
 
+  const importContracts = (event) => {
+
+    const file =
+      event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader =
+      new FileReader();
+
+    reader.onload = (e) => {
+
+      const importedContracts =
+        JSON.parse(e.target.result);
+
+      setContracts(importedContracts);
+
+      setToastMessage(
+        "Contracts imported successfully"
+      );
+
+      setTimeout(() => {
+        setToastMessage("");
+      }, 3000);
+    };
+
+    reader.readAsText(file);
+  };
+
   const filteredContracts = contracts.filter((contract) =>
     contract.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -213,6 +244,14 @@ function ContractsPage() {
       <button onClick={exportContracts}>
         Export JSON
       </button>
+
+      {" "}
+
+      <input
+        type="file"
+        accept=".json"
+        onChange={importContracts}
+      />
 
       <br /><br />
 
