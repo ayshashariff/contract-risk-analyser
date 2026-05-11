@@ -128,6 +128,29 @@ function ContractsPage() {
     setSelectedContract(null);
   };
 
+  const exportContracts = () => {
+
+    const dataStr =
+      JSON.stringify(contracts, null, 2);
+
+    const blob = new Blob(
+      [dataStr],
+      { type: "application/json" }
+    );
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const link =
+      document.createElement("a");
+
+    link.href = url;
+
+    link.download = "contracts.json";
+
+    link.click();
+  };
+
   const filteredContracts = contracts.filter((contract) =>
     contract.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -183,6 +206,12 @@ function ContractsPage() {
 
         {editingId ? "Update Contract" : "Add Contract"}
 
+      </button>
+
+      {" "}
+
+      <button onClick={exportContracts}>
+        Export JSON
       </button>
 
       <br /><br />
