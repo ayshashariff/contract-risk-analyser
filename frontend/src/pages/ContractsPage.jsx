@@ -32,6 +32,8 @@ function ContractsPage() {
   const [risk, setRisk] = useState("");
   const [search, setSearch] = useState("");
 
+  const [sortOrder, setSortOrder] = useState("asc");
+
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
@@ -198,9 +200,20 @@ function ContractsPage() {
         contract.risk.toLowerCase() === "low"
     ).length;
 
-  const filteredContracts = contracts.filter((contract) =>
-    contract.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredContracts = contracts
+    .filter((contract) =>
+      contract.title
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+    .sort((a, b) => {
+
+      if (sortOrder === "asc") {
+        return a.title.localeCompare(b.title);
+      }
+
+      return b.title.localeCompare(a.title);
+    });
 
   if (loading) {
     return <LoadingSpinner />;
@@ -243,6 +256,25 @@ function ContractsPage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
+
+      <br /><br />
+
+      <select
+        value={sortOrder}
+        onChange={(e) =>
+          setSortOrder(e.target.value)
+        }
+      >
+
+        <option value="asc">
+          Sort A-Z
+        </option>
+
+        <option value="desc">
+          Sort Z-A
+        </option>
+
+      </select>
 
       <br /><br />
 
