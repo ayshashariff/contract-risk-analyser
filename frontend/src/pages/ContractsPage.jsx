@@ -34,6 +34,8 @@ function ContractsPage() {
 
   const [sortOrder, setSortOrder] = useState("asc");
 
+  const [riskFilter, setRiskFilter] = useState("all");
+
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
@@ -201,11 +203,22 @@ function ContractsPage() {
     ).length;
 
   const filteredContracts = contracts
-    .filter((contract) =>
-      contract.title
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    )
+    .filter((contract) => {
+
+      const matchesSearch =
+        contract.title
+          .toLowerCase()
+          .includes(search.toLowerCase());
+
+      const matchesRisk =
+
+        riskFilter === "all"
+          ? true
+          : contract.risk.toLowerCase() === riskFilter;
+
+      return matchesSearch && matchesRisk;
+    })
+
     .sort((a, b) => {
 
       if (sortOrder === "asc") {
@@ -272,6 +285,29 @@ function ContractsPage() {
 
         <option value="desc">
           Sort Z-A
+        </option>
+
+      </select>
+
+      <br /><br />
+
+      <select
+        value={riskFilter}
+        onChange={(e) =>
+          setRiskFilter(e.target.value)
+        }
+      >
+
+        <option value="all">
+          All Risks
+        </option>
+
+        <option value="high">
+          High Risk
+        </option>
+
+        <option value="low">
+          Low Risk
         </option>
 
       </select>
