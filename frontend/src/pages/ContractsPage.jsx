@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ContractsTable from "../components/ContractsTable";
 import LoadingSpinner from "../components/LoadingSpinner";
+import Modal from "../components/Modal";
 
 function ContractsPage() {
 
@@ -24,6 +25,8 @@ function ContractsPage() {
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
+
+  const [selectedContract, setSelectedContract] = useState(null);
 
   const [editingId, setEditingId] = useState(null);
 
@@ -91,6 +94,14 @@ function ContractsPage() {
     setEditingId(contract.id);
   };
 
+  const viewContract = (contract) => {
+    setSelectedContract(contract);
+  };
+
+  const closeModal = () => {
+    setSelectedContract(null);
+  };
+
   const filteredContracts = contracts.filter((contract) =>
     contract.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -152,6 +163,12 @@ function ContractsPage() {
         contracts={filteredContracts}
         deleteContract={deleteContract}
         editContract={editContract}
+        viewContract={viewContract}
+      />
+
+      <Modal
+        contract={selectedContract}
+        closeModal={closeModal}
       />
 
     </div>

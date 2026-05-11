@@ -1,8 +1,10 @@
 import RiskBadge from "./RiskBadge";
+
 function ContractsTable({
   contracts,
   deleteContract,
-  editContract
+  editContract,
+  viewContract
 }) {
 
   if (contracts.length === 0) {
@@ -33,10 +35,18 @@ function ContractsTable({
             <td>{contract.title}</td>
 
             <td>
-  <RiskBadge risk={contract.risk} />
-</td>
+              <RiskBadge risk={contract.risk} />
+            </td>
 
             <td>
+
+              <button
+                onClick={() => viewContract(contract)}
+              >
+                View
+              </button>
+
+              {" "}
 
               <button
                 onClick={() => editContract(contract)}
